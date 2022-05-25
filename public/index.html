@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+
+  <script>
+
+    function setCookie(day){
+      localStorage.setItem('signInDay',day);
+      localStorage.setItem('day','0');
+    }
+
+    function getLocal(day){
+      var user=localStorage.getItem('signInDay');
+      var session = sessionStorage.getItem('register')
+      console.log(user);
+      if(user==null){
+        return -1;
+      }
+
+      if(user!=day && session!=1){
+        var item=localStorage.getItem('day');
+        localStorage.setItem('signInDay',day);
+        var newItem=parseInt(item);
+        newItem=newItem+1;
+        localStorage.setItem('day',newItem.toString());
+        return newItem;
+      }else{
+        return 0;
+      }
+
+    }
+
+    function welcome(){
+      var dateObj=new Date();
+      var day = dateObj.toDateString();
+      
+      
+      var item=localStorage.getItem('alerted');
+      
+      if(item!==day){
+        localStorage.setItem('alerted',day);
+        newDay=getLocal(day);
+        if(newDay==-1){
+        setCookie(day);
+        alert("Welcome");
+        return
+        }else if(newDay==0){
+          alert("Welcome back");
+        }else{
+          alert("Day"+(newDay+1));
+        }
+        
+      }
+    }
+
+    function clearStorage() {
+
+      let session = sessionStorage.getItem('register')
+      if(session==null){
+        localStorage.removeItem('alerted');
+      }
+      welcome();            
+      sessionStorage.setItem('register', 1);
+    }
+      
+    window.addEventListener('load', clearStorage);
+  </script>
+</html>
